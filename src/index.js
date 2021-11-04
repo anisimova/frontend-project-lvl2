@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import { cwd } from 'process';
-import fileComparison from '../src/compare.js';
+import fileComparison from './compare.js';
 
 const loadFile = (filepath) => {
   const realPath = path.resolve(cwd(), './fixtures/', filepath);
