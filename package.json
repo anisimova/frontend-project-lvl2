@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/anisimova/frontend-project-lvl2#readme",
   "dependencies": {
-    "commander": "^8.3.0"
+    "commander": "^8.3.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
