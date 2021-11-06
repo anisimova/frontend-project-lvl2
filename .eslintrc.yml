@@ -9,6 +9,5 @@ parserOptions:
 rules: {
   "no-console": "off",
   "import/extensions": 'off'
-  }
-rules:
+  },
   no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
