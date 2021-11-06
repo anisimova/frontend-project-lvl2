@@ -4,7 +4,7 @@ import { cwd } from 'process';
 import fileComparison from './compare.js';
 
 const loadFile = (filepath) => {
-  const realPath = path.resolve(cwd(), './fixtures/', filepath);
+  const realPath = path.resolve(cwd(), filepath);
   const normalFile = JSON.parse(fs.readFileSync(realPath));
   return normalFile;
 };
