@@ -11,4 +11,6 @@
 
 ### asciinema:  ###
 step 3:
-[![asciicast](https://asciinema.org/a/cmyNIgANCwvDcZVcwghw7YQ4E.svg)](https://asciinema.org/a/cmyNIgANCwvDcZVcwghw7YQ4E)
+[![asciicast](https://asciinema.org/a/OAOEKViqJWkAM9nZP6LRhyeeQ.svg)](https://asciinema.org/a/OAOEKViqJWkAM9nZP6LRhyeeQ)
+step 5:
+[![asciicast](https://asciinema.org/a/dCMnZW2vSeaT90ogPuuXaYE8f.svg)](https://asciinema.org/a/dCMnZW2vSeaT90ogPuuXaYE8f)

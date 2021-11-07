@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const fileComparison = (file1, file2) => {
+const parsingFiles = (file1, file2) => {
   const unsortedkeys = _.union(Object.keys(file1), Object.keys(file2));
   const keys = _.sortBy(unsortedkeys);
   const differences = keys.map((key) => {
@@ -13,4 +13,4 @@ const fileComparison = (file1, file2) => {
   return result;
 };
 
-export default fileComparison;
+export default parsingFiles;
