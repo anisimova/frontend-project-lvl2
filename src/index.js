@@ -17,9 +17,7 @@ const loadFile = (filepath) => {
   return normalFileYaml;
 };
 
-const defaultStyle = { format: 'stylish' };
-
-const genDiff = (filepath1, filepath2, style = defaultStyle) => {
+const genDiff = (filepath1, filepath2, style = 'stylish') => {
   const file1 = loadFile(filepath1);
   const file2 = loadFile(filepath2);
   const diff = parsingFiles(file1, file2);

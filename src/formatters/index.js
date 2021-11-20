@@ -3,7 +3,7 @@ import plain from './plain.js';
 import makeJson from './json.js';
 
 const styling = (diff, style) => {
-  switch (style.format) {
+  switch (style) {
     case 'stylish':
       return stylish(diff);
     case 'plain':
