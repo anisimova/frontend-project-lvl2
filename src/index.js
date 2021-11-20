@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { cwd } from 'process';
 import yaml from 'js-yaml';
 import parsingFiles from './parsers.js';
-import stylish from './stylish.js';
+import styling from './formatters/index.js';
 
 const loadFile = (filepath) => {
   const realPath = path.resolve(cwd(), filepath);
@@ -17,15 +17,14 @@ const loadFile = (filepath) => {
   return normalFileYaml;
 };
 
-const genDiff = (filepath1, filepath2, style = 'stylish') => {
+const defaultStyle = { format: 'stylish' };
+
+const genDiff = (filepath1, filepath2, style = defaultStyle) => {
   const file1 = loadFile(filepath1);
   const file2 = loadFile(filepath2);
   const diff = parsingFiles(file1, file2);
-  if (style === 'stylish') {
-    const result = stylish(diff);
-    return result;
-  }
-  return diff;
+  const result = styling(diff, style);
+  return result;
 };
 
 export default genDiff;

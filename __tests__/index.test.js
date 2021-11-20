@@ -14,11 +14,21 @@ const json2 = getFixturePath('file2.json');
 const yaml1 = getFixturePath('file1.yml');
 const yaml2 = getFixturePath('file2.yml');
 const resultStylish = readFile(getFixturePath('testStylish.txt'));
+const resultPlain = readFile(getFixturePath('testPlain.txt'));
+const plainFormat = { format: 'plain' };
 
-test('Test difference between 2 json files', () => {
+test('Test difference between 2 json files - Stylish', () => {
   expect(genDiff(json1, json2)).toBe(resultStylish);
 });
 
-test('Test difference between 2 yaml files', () => {
+test('Test difference between 2 yaml files - Stylish', () => {
   expect(genDiff(yaml1, yaml2)).toBe(resultStylish);
+});
+
+test('Test difference between 2 json files - Plain', () => {
+  expect(genDiff(json1, json2, plainFormat)).toBe(resultPlain);
+});
+
+test('Test difference between 2 yaml files - Plain', () => {
+  expect(genDiff(yaml1, yaml2, plainFormat)).toBe(resultPlain);
 });

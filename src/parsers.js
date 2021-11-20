@@ -7,39 +7,30 @@ const parsingFiles = (file1, file2) => {
     if (_.isObject(file1[key]) && _.isObject(file2[key])) {
       return {
         operation: 'equal',
+        type: 'object',
         attribute: key,
         value: parsingFiles(file1[key], file2[key]),
       };
     }
     if (_.isObject(file1[key]) && _.has(file2, key) && !_.isObject(file2[key])) {
-      return [{
-        operation: 'subtract',
-        type: 'value',
+      return {
+        operation: 'updated',
+        type: 'updatedValue1',
         attribute: key,
-        value: file1[key],
-      },
-      {
-        operation: 'add',
-        attribute: key,
-        value: file2[key],
-      }];
+        value: [file1[key], file2[key]],
+      };
     }
     if (_.isObject(file2[key]) && _.has(file1, key) && !_.isObject(file1[key])) {
-      return [{
-        operation: 'add',
+      return {
+        operation: 'updated',
+        type: 'updatedValue2',
         attribute: key,
-        value: file1[key],
-      },
-      {
-        operation: 'subtract',
-        type: 'value',
-        attribute: key,
-        value: file2[key],
-      }];
+        value: [file1[key], file2[key]],
+      };
     }
     if (_.isObject(file1[key]) && (!_.isObject(file2[key]) || !_.has(file2, key))) {
       return {
-        operation: 'subtract',
+        operation: 'removed',
         type: 'value',
         attribute: key,
         value: file1[key],
@@ -47,7 +38,7 @@ const parsingFiles = (file1, file2) => {
     }
     if ((!_.isObject(file1[key]) || !_.has(file1, key)) && _.isObject(file2[key])) {
       return {
-        operation: 'add',
+        operation: 'added',
         type: 'value',
         attribute: key,
         value: file2[key],
@@ -55,7 +46,7 @@ const parsingFiles = (file1, file2) => {
     }
     if (_.has(file2, key) && !_.has(file1, key)) {
       return {
-        operation: 'add',
+        operation: 'added',
         attribute: key,
         value: file2[key],
       };
@@ -68,19 +59,15 @@ const parsingFiles = (file1, file2) => {
       };
     }
     if (_.has(file2, key) && file2[key] !== file1[key]) {
-      return [{
-        operation: 'subtract',
+      return {
+        operation: 'updated',
+        type: 'updated',
         attribute: key,
-        value: file1[key],
-      },
-      {
-        operation: 'add',
-        attribute: key,
-        value: file2[key],
-      }];
+        value: [file1[key], file2[key]],
+      };
     }
     return {
-      operation: 'subtract',
+      operation: 'removed',
       attribute: key,
       value: file1[key],
     };
