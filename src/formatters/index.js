@@ -1,5 +1,6 @@
 import stylish from './stylish.js';
 import plain from './plain.js';
+import makeJson from './json.js';
 
 const styling = (diff, style) => {
   switch (style.format) {
@@ -7,8 +8,10 @@ const styling = (diff, style) => {
       return stylish(diff);
     case 'plain':
       return plain(diff);
+    case 'json':
+      return makeJson(diff);
     default:
-      return diff;
+      return 'Wrong format';
   }
 };
 
