@@ -45,7 +45,7 @@ const makeStyle = (diff, tab = 4) => {
       case 'updatedValue1':
         return `${tabOperand[0]}${attribute}: {\n${childrenStyle(value[0], tab + 4)}${tabs}}\n${tabOperand[1]}${attribute}: ${value[1]}\n`;
       case 'updatedValue2':
-        return `${tabOperand[0]}${attribute}: ${value[0]}\n${tabOperand[1]}${attribute}: ${childrenStyle(value[1], tab + 4)}\n`;
+        return `${tabOperand[0]}${attribute}: ${value[0]}\n${tabOperand[1]}${attribute}: {\n${childrenStyle(value[1], tab + 4)}${tabs}}\n`;
       default:
         return `${tabOperand}${attribute}: ${value}\n`;
     }
