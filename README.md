@@ -21,8 +21,8 @@
 3. Для изменения формата вывода при запуске программы введите флаг **-f** или **--format** и необходимый формат - stylish, plain или json
 4. Для вывода справки по утилите введите в консоли **gendiff -h**
 
-### Hexlet tests and linter status: ###
-[![Actions Status](https://github.com/anisimova/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/anisimova/frontend-project-lvl2/actions) [![linter-check](https://github.com/anisimova/frontend-project-lvl2/actions/workflows/linter-check.yml/badge.svg)](https://github.com/anisimova/frontend-project-lvl2/actions/workflows/linter-check.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/ac156686841e9445fb67/maintainability)](https://codeclimate.com/github/anisimova/frontend-project-lvl2/maintainability)
+### Badges: ###
+[![Actions Status](https://github.com/anisimova/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/anisimova/frontend-project-lvl2/actions) [![linter-check](https://github.com/anisimova/frontend-project-lvl2/actions/workflows/linter-check.yml/badge.svg)](https://github.com/anisimova/frontend-project-lvl2/actions/workflows/linter-check.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/ac156686841e9445fb67/maintainability)](https://codeclimate.com/github/anisimova/frontend-project-lvl2/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/ac156686841e9445fb67/test_coverage)](https://codeclimate.com/github/anisimova/frontend-project-lvl2/test_coverage)
 
 ### asciinema:  ###
 step 3:
