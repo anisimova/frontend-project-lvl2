@@ -21,21 +21,27 @@ const makeValue = (value) => {
 
 const makePlain = (diff, parent = '') => {
   const result = diff.flatMap((data) => {
-    const {
-      operation, attribute, value,
-    } = data;
-    const key = (parent !== '') ? parent.concat('.', attribute) : attribute;
-    if (operation === 'equal' && Array.isArray(value)) {
-      return makePlain(value, key);
-    }
-    const plainValue = makeValue(value);
-    switch (operation) {
+    const { type, property } = data;
+    const key = (parent !== '') ? parent.concat('.', property) : property;
+    switch (type) {
+      case 'object': {
+        const { child } = data;
+        return makePlain(child, key);
+      }
       case 'removed':
-        return `Property '${key}' was ${operation}\n`;
-      case 'added':
-        return `Property '${key}' was ${operation} with value: ${plainValue}\n`;
-      case 'updated':
-        return `Property '${key}' was ${operation}. From ${plainValue[0]} to ${plainValue[1]}\n`;
+        return `Property '${key}' was ${type}\n`;
+      case 'added': {
+        const { value } = data;
+        const plainValue = makeValue(value);
+        return `Property '${key}' was ${type} with value: ${plainValue}\n`;
+      }
+      case 'updated': {
+        const { oldValue, newValue } = data;
+        const beforeValue = makeValue(oldValue);
+        const afterValue = makeValue(newValue);
+        return `Property '${key}' was ${type}. From ${beforeValue} to ${afterValue}\n`;
+      }
+      case 'equal':
       default:
         return '';
     }

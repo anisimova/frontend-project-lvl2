@@ -11,7 +11,7 @@ const styling = (diff, style) => {
     case 'json':
       return makeJson(diff);
     default:
-      return 'Wrong format';
+      throw new Error('Wrong format. Use: stylish, plain or json.');
   }
 };
 

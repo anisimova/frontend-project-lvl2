@@ -1,16 +1,26 @@
 import _ from 'lodash';
 
-const childrenStyle = (child, tab) => {
+const valueStyle = (value, tab) => {
   const tabs = ' '.repeat(tab);
-  const keys = Object.keys(child);
+  const keys = Object.keys(value);
   const styleChild = keys.map((key) => {
-    const value = child[key];
-    if (_.isObject(value)) {
-      return `${tabs}${key}: {\n${childrenStyle(value, tab + 4)}${tabs}}\n`;
+    const list = value[key];
+    if (_.isObject(list)) {
+      return `${tabs}${key}: {\n${valueStyle(list, tab + 4)}${tabs}}\n`;
     }
-    return `${tabs}${key}: ${value}\n`;
+    return `${tabs}${key}: ${list}\n`;
   }).join('');
   return styleChild;
+};
+
+const makeValue = (value, tab, tabs) => {
+  if (value === null) return String(value);
+  switch (typeof value) {
+    case 'object':
+      return `{\n${valueStyle(value, tab + 4)}${tabs}}`;
+    default:
+      return value;
+  }
 };
 
 const makeOperand = (tab, type) => {
@@ -19,8 +29,6 @@ const makeOperand = (tab, type) => {
       return ' '.repeat(tab).concat('+ ');
     case 'removed':
       return ' '.repeat(tab).concat('- ');
-    case 'equal':
-      return ' '.repeat(tab).concat('  ');
     case 'updated':
       return [' '.repeat(tab).concat('- '), ' '.repeat(tab).concat('+ ')];
     default:
@@ -31,23 +39,28 @@ const makeOperand = (tab, type) => {
 const makeStyle = (diff, tab = 4) => {
   const tabs = ' '.repeat(tab);
   const styleDiff = diff.map((data) => {
-    const {
-      operation, type, attribute, value,
-    } = data;
-    const tabOperand = makeOperand(tab - 2, operation);
+    const { type, property } = data;
+    const tabOperand = makeOperand(tab - 2, type);
     switch (type) {
-      case 'object':
-        return `${tabOperand}${attribute}: {\n${makeStyle(value, tab + 4)}${tabs}}\n`;
-      case 'value':
-        return `${tabOperand}${attribute}: {\n${childrenStyle(value, tab + 4)}${tabs}}\n`;
-      case 'updated':
-        return `${tabOperand[0]}${attribute}: ${value[0]}\n${tabOperand[1]}${attribute}: ${value[1]}\n`;
-      case 'updatedValue1':
-        return `${tabOperand[0]}${attribute}: {\n${childrenStyle(value[0], tab + 4)}${tabs}}\n${tabOperand[1]}${attribute}: ${value[1]}\n`;
-      case 'updatedValue2':
-        return `${tabOperand[0]}${attribute}: ${value[0]}\n${tabOperand[1]}${attribute}: {\n${childrenStyle(value[1], tab + 4)}${tabs}}\n`;
+      case 'object': {
+        const { child } = data;
+        return `${tabOperand}${property}: {\n${makeStyle(child, tab + 4)}${tabs}}\n`;
+      }
+      case 'updated': {
+        const { oldValue, newValue } = data;
+        const beforeValue = makeValue(oldValue, tab, tabs);
+        const afterValue = makeValue(newValue, tab);
+        return `${tabOperand[0]}${property}: ${beforeValue}\n${tabOperand[1]}${property}: ${afterValue}\n`;
+      }
+      case 'added':
+      case 'removed':
+      case 'equal': {
+        const { value } = data;
+        const realValue = makeValue(value, tab, tabs);
+        return `${tabOperand}${property}: ${realValue}\n`;
+      }
       default:
-        return `${tabOperand}${attribute}: ${value}\n`;
+        throw new Error('Wrong type in diff.');
     }
   })
     .join('');

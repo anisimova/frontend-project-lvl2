@@ -2,25 +2,32 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { cwd } from 'process';
 import yaml from 'js-yaml';
-import parsingFiles from './parsers.js';
+import makeDiff from './diff.js';
 import styling from './formatters/index.js';
 
-const loadFile = (filepath) => {
+const parsering = (fileType, readingFile) => {
+  switch (fileType) {
+    case '.json':
+      return JSON.parse(readingFile);
+    case '.yml':
+    case '.yaml':
+      return yaml.load(readingFile);
+    default:
+      throw new Error('Wrong file. Use: JSON or YAML files.');
+  }
+};
+
+const readFile = (filepath) => {
   const realPath = path.resolve(cwd(), filepath);
   const fileType = path.extname(filepath);
   const readingFile = fs.readFileSync(realPath, 'utf8');
-  if (fileType === '.json') {
-    const normalFileJson = JSON.parse(readingFile);
-    return normalFileJson;
-  }
-  const normalFileYaml = yaml.load(readingFile);
-  return normalFileYaml;
+  return parsering(fileType, readingFile);
 };
 
 const genDiff = (filepath1, filepath2, style = 'stylish') => {
-  const file1 = loadFile(filepath1);
-  const file2 = loadFile(filepath2);
-  const diff = parsingFiles(file1, file2);
+  const file1 = readFile(filepath1);
+  const file2 = readFile(filepath2);
+  const diff = makeDiff(file1, file2);
   const result = styling(diff, style);
   return result;
 };
