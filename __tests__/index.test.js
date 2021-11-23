@@ -29,7 +29,7 @@ test('json files - Plain', () => {
   expect(genDiff(json1, json2, 'plain')).toBe(resultPlain);
 });
 
-test('2 yaml files - Plain', () => {
+test('yaml files - Plain', () => {
   expect(genDiff(yaml1, yaml2, 'plain')).toBe(resultPlain);
 });
 

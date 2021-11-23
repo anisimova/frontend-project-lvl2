@@ -49,7 +49,7 @@ const makeStyle = (diff, tab = 4) => {
       case 'updated': {
         const { oldValue, newValue } = data;
         const beforeValue = makeValue(oldValue, tab, tabs);
-        const afterValue = makeValue(newValue, tab);
+        const afterValue = makeValue(newValue, tab, tabs);
         return `${tabOperand[0]}${property}: ${beforeValue}\n${tabOperand[1]}${property}: ${afterValue}\n`;
       }
       case 'added':
