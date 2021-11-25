@@ -25,12 +25,12 @@
   },
   "homepage": "https://github.com/anisimova/frontend-project-lvl2#readme",
   "dependencies": {
-    "@jest/globals": "^27.3.1",
     "commander": "^8.3.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@jest/globals": "^27.3.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.25.2",

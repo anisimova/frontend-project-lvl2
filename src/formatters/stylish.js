@@ -1,26 +1,23 @@
 import _ from 'lodash';
 
-const valueStyle = (value, tab) => {
-  const tabs = ' '.repeat(tab);
-  const keys = Object.keys(value);
-  const styleChild = keys.map((key) => {
-    const list = value[key];
-    if (_.isObject(list)) {
-      return `${tabs}${key}: {\n${valueStyle(list, tab + 4)}${tabs}}\n`;
-    }
-    return `${tabs}${key}: ${list}\n`;
-  }).join('');
-  return styleChild;
-};
+const defaultTabs = 4;
 
-const makeValue = (value, tab, tabs) => {
+const makeValue = (value, tab) => {
   if (value === null) return String(value);
-  switch (typeof value) {
-    case 'object':
-      return `{\n${valueStyle(value, tab + 4)}${tabs}}`;
-    default:
-      return value;
+  if (_.isObject(value)) {
+    const tabs = ' '.repeat(tab);
+    const keys = Object.keys(value);
+    const styleChild = keys.map((key) => {
+      const list = value[key];
+      const tabsList = ' '.repeat(tab + defaultTabs);
+      if (_.isObject(list)) {
+        return `${tabsList}${key}: ${makeValue(list, tab + defaultTabs)}`;
+      }
+      return `${tabsList}${key}: ${list}`;
+    }).join('\n');
+    return `{\n${styleChild}\n${tabs}}`;
   }
+  return value;
 };
 
 const makeOperand = (tab, type) => {
@@ -36,27 +33,27 @@ const makeOperand = (tab, type) => {
   }
 };
 
-const makeStyle = (diff, tab = 4) => {
+const makeStyle = (diff, tab = defaultTabs) => {
   const tabs = ' '.repeat(tab);
   const styleDiff = diff.map((data) => {
     const { type, property } = data;
     const tabOperand = makeOperand(tab - 2, type);
     switch (type) {
       case 'object': {
-        const { child } = data;
-        return `${tabOperand}${property}: {\n${makeStyle(child, tab + 4)}${tabs}}\n`;
+        const { children } = data;
+        return `${tabOperand}${property}: {\n${makeStyle(children, tab + defaultTabs)}${tabs}}\n`;
       }
       case 'updated': {
         const { oldValue, newValue } = data;
-        const beforeValue = makeValue(oldValue, tab, tabs);
-        const afterValue = makeValue(newValue, tab, tabs);
+        const beforeValue = makeValue(oldValue, tab);
+        const afterValue = makeValue(newValue, tab);
         return `${tabOperand[0]}${property}: ${beforeValue}\n${tabOperand[1]}${property}: ${afterValue}\n`;
       }
       case 'added':
       case 'removed':
       case 'equal': {
         const { value } = data;
-        const realValue = makeValue(value, tab, tabs);
+        const realValue = makeValue(value, tab);
         return `${tabOperand}${property}: ${realValue}\n`;
       }
       default:

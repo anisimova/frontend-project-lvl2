@@ -1,21 +1,20 @@
 import _ from 'lodash';
 
 const makeValue = (value) => {
-  switch (_.isObject(value)) {
+  switch (_.isPlainObject(value)) {
     case true:
-      switch (Array.isArray(value)) {
-        case true:
-          return value.map((val) => makeValue(val));
-        default:
-          return '[complex value]';
-      }
-    default:
+      return '[complex value]';
+    case false:
       switch (typeof value) {
+        case 'object':
+          return value === null ? null : value.map((val) => makeValue(val));
         case 'string':
           return `'${value}'`;
         default:
           return value;
       }
+    default:
+      return '';
   }
 };
 
@@ -25,8 +24,8 @@ const makePlain = (diff, parent = '') => {
     const key = (parent !== '') ? parent.concat('.', property) : property;
     switch (type) {
       case 'object': {
-        const { child } = data;
-        return makePlain(child, key);
+        const { children } = data;
+        return makePlain(children, key);
       }
       case 'removed':
         return `Property '${key}' was ${type}\n`;
@@ -42,8 +41,9 @@ const makePlain = (diff, parent = '') => {
         return `Property '${key}' was ${type}. From ${beforeValue} to ${afterValue}\n`;
       }
       case 'equal':
-      default:
         return '';
+      default:
+        throw new Error('Wrong type in diff.');
     }
   });
   return result;
