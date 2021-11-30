@@ -43,7 +43,7 @@ const makePlain = (diff, parent = '') => {
       case 'equal':
         return '';
       default:
-        throw new Error('Wrong type in diff.');
+        throw new Error(`Wrong type: ${type} in diff.`);
     }
   });
   return result;

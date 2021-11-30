@@ -5,23 +5,23 @@ import yaml from 'js-yaml';
 import makeDiff from './diff.js';
 import styling from './formatters/index.js';
 
-const parser = (fileType, readingFile) => {
-  switch (fileType) {
+const parser = (dataType, readingFile) => {
+  switch (dataType) {
     case 'json':
       return JSON.parse(readingFile);
     case 'yml':
     case 'yaml':
       return yaml.load(readingFile);
     default:
-      throw new TypeError(`Wrong file type. You used: ${fileType}. Please, use: JSON or YAML files.`);
+      throw new TypeError(`Wrong file type. You used: ${dataType}. Please, use: JSON or YAML files.`);
   }
 };
 
 const readFile = (filepath) => {
   const realPath = path.resolve(cwd(), filepath);
-  const fileType = path.extname(filepath).substr(1);
+  const dataType = path.extname(filepath).substr(1);
   const readingFile = fs.readFileSync(realPath, 'utf8');
-  return parser(fileType, readingFile);
+  return parser(dataType, readingFile);
 };
 
 const genDiff = (filepath1, filepath2, style = 'stylish') => {

@@ -2,22 +2,13 @@ import _ from 'lodash';
 
 const defaultTabs = 4;
 
-const makeValue = (value, tab) => {
-  if (value === null) return String(value);
-  if (_.isObject(value)) {
-    const tabs = ' '.repeat(tab);
-    const keys = Object.keys(value);
-    const styleChild = keys.map((key) => {
-      const list = value[key];
-      const tabsList = ' '.repeat(tab + defaultTabs);
-      if (_.isObject(list)) {
-        return `${tabsList}${key}: ${makeValue(list, tab + defaultTabs)}`;
-      }
-      return `${tabsList}${key}: ${list}`;
-    }).join('\n');
-    return `{\n${styleChild}\n${tabs}}`;
-  }
-  return value;
+const formatValue = (data, tab) => {
+  if (data === null || !_.isObject(data)) return data;
+  const tabsEnd = ' '.repeat(tab);
+  const tabsOpen = ' '.repeat(tab + defaultTabs);
+  const children = Object.entries(data);
+  const styleChild = children.map(([key, value]) => `${tabsOpen}${key}: ${formatValue(value, tab + defaultTabs)}`);
+  return `{\n${styleChild.join('\n')}\n${tabsEnd}}`;
 };
 
 const makeOperand = (tab, type) => {
@@ -45,19 +36,19 @@ const makeStyle = (diff, tab = defaultTabs) => {
       }
       case 'updated': {
         const { oldValue, newValue } = data;
-        const beforeValue = makeValue(oldValue, tab);
-        const afterValue = makeValue(newValue, tab);
+        const beforeValue = formatValue(oldValue, tab);
+        const afterValue = formatValue(newValue, tab);
         return `${tabOperand[0]}${property}: ${beforeValue}\n${tabOperand[1]}${property}: ${afterValue}\n`;
       }
       case 'added':
       case 'removed':
       case 'equal': {
         const { value } = data;
-        const realValue = makeValue(value, tab);
+        const realValue = formatValue(value, tab);
         return `${tabOperand}${property}: ${realValue}\n`;
       }
       default:
-        throw new Error('Wrong type in diff.');
+        throw new Error(`Wrong type: ${type} in diff.`);
     }
   })
     .join('');

@@ -18,7 +18,7 @@ const makeDiff = (file1, file2) => {
         value: file1[key],
       };
     }
-    if (file2[key] === file1[key]) {
+    if (_.isEqual(file2[key], file1[key])) {
       return {
         type: 'equal',
         property: key,
